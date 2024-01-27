@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -41,7 +42,13 @@ fun Screen2(
             Text(text = "Cambiar Color", color = Color.White)
         }
 
-        Text(text = viewModel.textApiState)
+        if (viewModel.showProgress) {
+            CircularProgressIndicator()
+        }
+
+        if (viewModel.showText){
+            Text(text = viewModel.textApiState)
+        }
 
         Button(onClick = {
             viewModel.fetchData()

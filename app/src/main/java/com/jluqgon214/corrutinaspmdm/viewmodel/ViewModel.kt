@@ -58,13 +58,21 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
     fun fetchData() {
         contApiState = contApiState.plus(1)
         //Nos permite crear una corrutina desde un ViewModel
+        showText = false
+        showProgress = true
         viewModelScope.launch {
             val result = withContext(Dispatchers.IO) {
                 delay(5000)
                 "Respuesta de la API ($contApiState)"
             }
+            showProgress = false
             textApiState = result
+            showText = true
         }
     }
+
+    //Parte 3
+    var showProgress by mutableStateOf(false)
+    var showText by mutableStateOf(false)
 
 }
