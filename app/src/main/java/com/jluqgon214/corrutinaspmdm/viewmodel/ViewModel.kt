@@ -7,6 +7,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ViewModel(application: Application) : AndroidViewModel(application) {
     //Parte 1: Mutable Live Data
@@ -15,41 +20,51 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
     var contApi = MutableLiveData<Int>(0)
 
     fun CambiarColor(): Color {
-        if (colorButton.value!!) {
-            return Color.Blue
-        }
-        else {
-            return Color.Red
+        return if (colorButton.value!!) {
+            Color.Blue
+        } else {
+            Color.Red
         }
 
     }
 
-    fun bloqueoApp(viewModel: ViewModel) {
+    fun bloqueoApp() {
         Thread.sleep(5000)
-        viewModel.contApi.value = viewModel.contApi.value?.plus(1)
-        viewModel.textApi.value = "Respuesta de la API (${viewModel.contApi.value})"
+        contApi.value = contApi.value?.plus(1)
+        textApi.value = "Respuesta de la API (${contApi.value})"
     }
 
     //Parte 1: mutableStateOf()
     var colorButtonState by mutableStateOf(true)
-    var textApi2State by mutableStateOf("")
-    var contApi2State by mutableStateOf(0)
+    var textApiState by mutableStateOf("")
+    var contApiState by mutableStateOf(0)
 
     fun CambiarColor2(): Color {
-        if (colorButtonState) {
-            return Color.Blue
-        }
-        else {
-            return Color.Red
+        return if (colorButtonState) {
+            Color.Blue
+        } else {
+            Color.Red
         }
 
     }
 
-    fun bloqueoApp2(viewModel: ViewModel) {
+    fun bloqueoApp2() {
         Thread.sleep(5000)
-        viewModel.contApi2State = viewModel.contApi2State.plus(1)
-        viewModel.textApi2State = "Respuesta de la API (${ viewModel.contApi2State})"
+        contApiState = contApiState.plus(1)
+        textApiState = "Respuesta de la API (${contApiState})"
     }
 
+    //Parte 2: Implementacion de la Corrutina
+    fun fetchData() {
+        contApiState = contApiState.plus(1)
+        //Nos permite crear una corrutina desde un ViewModel
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                delay(5000)
+                "Respuesta de la API ($contApiState)"
+            }
+            textApiState = result
+        }
+    }
 
 }

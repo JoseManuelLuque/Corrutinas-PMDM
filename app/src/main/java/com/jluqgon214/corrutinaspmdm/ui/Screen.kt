@@ -43,7 +43,7 @@ fun Screen(
         Text(text = viewModel.textApi.value!!)
 
         Button(onClick = {
-            viewModel.bloqueoApp(viewModel)
+            viewModel.bloqueoApp()
             navController.navigate("Carga")
         }) {
             Text(text = "Llamar API")

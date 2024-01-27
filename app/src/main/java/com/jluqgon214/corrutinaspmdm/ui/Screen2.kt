@@ -41,10 +41,10 @@ fun Screen2(
             Text(text = "Cambiar Color", color = Color.White)
         }
 
-        Text(text = viewModel.textApi2State)
+        Text(text = viewModel.textApiState)
 
         Button(onClick = {
-            viewModel.bloqueoApp2(viewModel)
+            viewModel.fetchData()
             navController.navigate("Carga")
         }) {
             Text(text = "Llamar API")
